@@ -3,6 +3,7 @@ var canvasChart = function(){
     var ctx,
     margin = {top: 40, left: 75, right: 0, bottom: 75},
     maxYValue = 0, 
+    maxXValue = 0,
     ratio = 0,
     pointRadius = 20,
     renderType = {lines: 'lines', points : 'points'},
@@ -23,9 +24,11 @@ var canvasChart = function(){
 
           xMax = chartWidth - (margin.left + margin.right);
           yMax = chartHeight - (margin.top + margin.bottom);
-         maxYValue = getMaxYValue();
+         maxYValue = 1;
+         maxXValue = getMaxXValue();
          maxPop = getMaxPopulation();
-         ratio = yMax / maxYValue;
+         ratio = yMax / maxYValue / 5;
+         xRatio = xMax / maxXValue;
 
          if( data.renderTypes === undefined || data.renderTypes == null)
             data.renderTypes = [renderType.lines];
@@ -107,30 +110,52 @@ var canvasChart = function(){
             var army = 0;
             var population = 0;
             var year = 0;
+            var entryNumber = 0;
+        for(country in data_set["1989"]){
+            entryNumber ++ ;
+            var set = data_set["1989"][country];
+            oil = set.oil;
+            army = set.army;
+            population = set.population;
 
-        // for(country in data_set["1989"]){
-        //     var set = data_set["1989"][country];
-        //     oil = set.oil;
-        //     army = set.army;
-        //     population = set.population;
-        // }
-        for(var i = 0; i < data.dataPoints.length; i++){
-            
-            army = (maxYValue - pt.y) * ratio;
-            if( y < margin.top) y = margin.top;
-             oil = (i * xInc) + margin.left;
-             population = getPointRadius()
+            var x = 0;
+            var y = 0;
+            y = (maxYValue - army) * ratio;
+            if( y < margin.top) army = margin.top;
+            debugger
+             x = (maxXValue - oil) *xRatio;
+             population = getPointRadius(set.population)
 
-            var dataPoint = { x: x, y: y, currX: margin.left, x2: prevX, y2: prevY, originalY : pt.y, population : population};
+            var dataPoint = { x: x, y: y, currX: margin.left, x2: prevX, y2: prevY, originalY : set.army, population : population};
             finalDataPoints.push(dataPoint);
 
-            prevX = oil;
-            prevY = army;
-
-            // if(data.renderTypes.contains(renderType.lines)) 
+            prevX = x;
+            prevY = y;
             drawLines();
             drawPoints();
+
         }
+
+
+        // for(var i = 0; i < data.dataPoints.length; i++){
+        //     pt = data.dataPoints[i];
+        //     var x = 0;
+        //     var y = 0;
+        //     y = (maxYValue - pt.y) * ratio;
+        //     if( y < margin.top) y = margin.top;
+        //      x = (i * xInc) + margin.left;
+        //      population = getPointRadius(12345123)
+
+        //     var dataPoint = { x: x, y: y, currX: margin.left, x2: prevX, y2: prevY, originalY : pt.y, population : population};
+        //     finalDataPoints.push(dataPoint);
+
+        //     prevX = x;
+        //     prevY = y;
+
+        //     // if(data.renderTypes.contains(renderType.lines)) 
+        //     drawLines();
+        //     drawPoints();
+        // }
     },
 
     drawLines = function(){
@@ -153,11 +178,14 @@ var canvasChart = function(){
     drawPoints = function(){
         for (var i = 0; i < finalDataPoints.length; i++){
             var pt = finalDataPoints[i];
-            renderCircle(pt.x, pt.y, pt.population);
+            renderCircle(pt.x, pt.y, null, pt.population);
         }
     },
 
     renderCircle = function(x, y, highlightColor, pointRadius = 20){
+        debugger
+        x = Math.round(x);
+        y = Math.round(y);
         var radgrad = ctx.createRadialGradient(x, y, pointRadius, x - 5, y - 5, 0);
         radgrad.addColorStop(0, (highlightColor == null) ? 'Green' : highlightColor);
         radgrad.addColorStop(0.9, 'White');
@@ -173,7 +201,7 @@ var canvasChart = function(){
     },
 
     getXInc = function(){
-        return Math.round(xMax / data.dataPoints.length) -1;
+        return Math.round(xMax / Object.keys(data_set).length) -1;
     },
 
     mouseMove = function(){
@@ -181,16 +209,31 @@ var canvasChart = function(){
     },
 
     getMaxYValue = function(){
+        debugger
         var maxY = 0;
-        for (var i = 0; i < data.dataPoints.length; i++){
-            var y = data.dataPoints[i].y;
-            if (y > maxY) maxY = y;
+        for(var year in data_set){
+            for (var country in data_set[year]){
+                if (maxY < data_set[year][country].army)
+                maxY = data_set[year][country].army
+            }
+            break;
         }
         return maxY;
     },
 
+    getMaxXValue = function(){
+        var maxX = 0;
+        for(var year in data_set){
+            for (var country in data_set[year]){
+                if (maxX < data_set[year][country].oil)
+                maxX = data_set[year][country].oil
+            }
+            break;
+        }
+        return maxX;
+    },
+
     getMaxPopulation = function(){
-        debugger
         var maxPop = 0;
         for(var year in data_set){
             for (var country in data_set[year]){
@@ -203,7 +246,7 @@ var canvasChart = function(){
         return maxPop;
     },
     getPointRadius = function (pointPopulation){
-        return pointPopulation / maxPop * pointRadius;
+        return pointPopulation / maxPop * pointRadius / 10;
     },
 
     createOverlay = function(){
