@@ -24,7 +24,7 @@ var canvasChart = function(){
           xMax = chartWidth - (margin.left + margin.right);
           yMax = chartHeight - (margin.top + margin.bottom);
          maxYValue = getMaxYValue();
-         maxPop = getMaxPopulation()
+         maxPop = getMaxPopulation();
          ratio = yMax / maxYValue;
 
          if( data.renderTypes === undefined || data.renderTypes == null)
@@ -103,17 +103,29 @@ var canvasChart = function(){
         var xInc = getXInc(),
             prevX = 0,
             prevY = 0;
-        for(var i = 0; i < data.dataPoints.length; i++){
-            var pt = data.dataPoints[i];
-            var y = (maxYValue - pt.y) * ratio;
-            if( y < margin.top) y = margin.top;
-            var x = (i * xInc) + margin.left;
+            var oil = 0;
+            var army = 0;
+            var population = 0;
+            var year = 0;
 
-            var dataPoint = { x: x, y: y, currX: margin.left, x2: prevX, y2: prevY, originalY : pt.y};
+        // for(country in data_set["1989"]){
+        //     var set = data_set["1989"][country];
+        //     oil = set.oil;
+        //     army = set.army;
+        //     population = set.population;
+        // }
+        for(var i = 0; i < data.dataPoints.length; i++){
+            
+            army = (maxYValue - pt.y) * ratio;
+            if( y < margin.top) y = margin.top;
+             oil = (i * xInc) + margin.left;
+             population = getPointRadius()
+
+            var dataPoint = { x: x, y: y, currX: margin.left, x2: prevX, y2: prevY, originalY : pt.y, population : population};
             finalDataPoints.push(dataPoint);
 
-            prevX = x;
-            prevY = y;
+            prevX = oil;
+            prevY = army;
 
             // if(data.renderTypes.contains(renderType.lines)) 
             drawLines();
@@ -141,7 +153,7 @@ var canvasChart = function(){
     drawPoints = function(){
         for (var i = 0; i < finalDataPoints.length; i++){
             var pt = finalDataPoints[i];
-            renderCircle(pt.x, pt.y);
+            renderCircle(pt.x, pt.y, pt.population);
         }
     },
 
