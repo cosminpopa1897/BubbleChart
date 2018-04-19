@@ -1,0 +1,16 @@
+-modifica labeluri
+-pune valori pe margini
+-urca dataPOinturile
+
+
+    var oil = 0;
+            var army = 0;
+            var population = 0;
+            var year = 0;
+
+        for(country in data_set["1989"]){
+            var set = data_set["1989"][country];
+            oil = set.oil;
+            army = set.army;
+            population = set.population;
+        }
