@@ -10,6 +10,16 @@
 
         window.onload = function(){
             var chart = new canvasChart();
+            
+            var config = {};
+            config.title = "US Population Chart";
+            config.animationPoints = true;
+            config.animationSpeed = 20;
+            config.xLabel = 'Oil per capita consumption';
+            config.yLabel = 'Army GDP percent Spending';
+            config.labelFont = '19pt Arial';
+            config.dataPointFont = '10pt Arial';
+            config.renderTypes = [chart.renderType.lines, chart.renderType.points];
 
             var dataAndSettings = {
                 title: "US Population Chart",
@@ -27,7 +37,19 @@
                    { x: '1850', y: 23.1, z:5}
                 ]
             };
+            AppendConfig(dataAndSettings, config)
             chart.render('BubbleChart', dataAndSettings);
+        }
+
+        function AppendConfig(data, config){
+            data_set.title = config.title;
+            data_set.animationPoints = config.animationPoints;
+            data_set.animationSpeed = config.animationSpeed;
+            data_set.xLabel = config.xLabel;
+            data_set.yLabel = config.yLabel;
+            data_set.labelFont = config.labelFont;
+            data_set.dataPointFont = config.dataPointFont;
+            data_set.renderTypes = config.renderTypes;
         }
     </script>
 </body>

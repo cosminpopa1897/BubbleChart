@@ -1,7 +1,7 @@
 var canvasChart = function(){
 
     var ctx,
-    margin = {top: 40, left: 75, right:0, bottom: 75},
+    margin = {top: 100, left: 75, right:100, bottom: 75},
     maxYValue = 0, 
     maxXValue = 0,
     ratio = 0,
@@ -11,7 +11,7 @@ var canvasChart = function(){
     selectedDataPoint = null,
     timerID,
     overlayDiv,
-    maxPop = 0,
+    maxZValue = 0,
 
     render = function(canvasID, dataObj){
          data = dataObj;
@@ -19,20 +19,25 @@ var canvasChart = function(){
          var canvas = document.getElementById(canvasID);
          chartHeight = canvas.getAttribute('height');
          chartWidth = canvas.getAttribute('width');
+
+
          canvas.addEventListener('mousemove', mouseMove, false);
          ctx = canvas.getContext("2d");
           xMax = chartWidth -  (margin.left + margin.right);
           yMax = chartHeight - (margin.top + margin.bottom);
-         maxYValue = Math.ceil(getMaxYValue());
-         maxXValue = getMaxXValue();
-         maxPop = getMaxPopulation();
-         maxRadius = getPointRadius(maxPop);
+          //Delete at refactoring
+          var year = '1989';
+          var countries =Object.keys(data_set[year]);
+         maxYValue = Math.ceil(getAttributeMaxValue(year, countries, 'army', data_set));
+         maxXValue = getAttributeMaxValue(year, countries, 'oil', data_set);
+         maxZValue = getAttributeMaxValue(year, countries, 'population', data_set);
+         maxRadius = getPointRadius(maxZValue);
 
          ratio = yMax / maxYValue;
          xRatio = xMax / maxXValue;
-        debugger
-         margin.right += pointRadius;
-         margin.bottom += pointRadius;
+
+         margin.right += maxRadius;
+         margin.bottom += maxRadius;
          
          if( data.renderTypes === undefined || data.renderTypes == null)
             data.renderTypes = [renderType.lines];
@@ -41,7 +46,6 @@ var canvasChart = function(){
     },
 
     renderParts = function(){
-        getMaxPopulation()
         renderBackround();
         renderText();
         renderLinesAndLabels(true);
@@ -54,6 +58,7 @@ var canvasChart = function(){
         lingrad.addColorStop(0.2, '#fff');
         lingrad.addColorStop(0.8, '#fff');
         lingrad.addColorStop(1, '#D4D4D4');
+
         ctx.fillStyle = lingrad;
         ctx.fillRect(margin.left, margin.top, xMax , yMax );
         ctx.fillStyle = 'black'
@@ -67,7 +72,7 @@ var canvasChart = function(){
         ctx.fillText(data.title, (chartWidth / 2), margin.top/2);
 
         var txtSize = ctx.measureText(data.xLabel);
-        ctx.fillText(data.xLabel, margin.right + (xMax / 2) - (txtSize.width / 2), yMax + margin.top + (margin.bottom / 1.2));
+        ctx.fillText(data.xLabel, margin.left + (xMax  / 2) , yMax + margin.top/1.2 + (margin.bottom / 1.2));
 
         ctx.save();
         ctx.rotate(-Math.PI / 2);
@@ -77,14 +82,20 @@ var canvasChart = function(){
     },
 
     renderLinesAndLabels = function(shouldRenderText){
-        var yInc = (yMax + margin.top) / 20;
-        var yPos = 0;
-        var xInc = (xMax + margin.left)  / 20 ;
-        var xPos = 0;
+        var yInc = yMax / 20;
+        var yPos = margin.top;
+        var xInc = xMax  / 20 ;
+        var xPos = margin.left;
         var ceiledYMaxValue = Math.ceil(maxYValue)
+
+        if(shouldRenderText){
+            ctx.font = (data.dataPointFont != null) ? data.dataPointFont : '10pt Calibri';
+            var txt =  ceiledYMaxValue;
+            var txtSize = ctx.measureText(txt);
+            ctx.fillText(txt, margin.left - ((txtSize.width >= 14) ? txtSize.width: 10) -7 , yPos + 4);
+        }
         for (var i = 0; i < 20; i++){
             yPos +=  yInc;
-            xPos += (i ==0 ) ? margin.left: xInc;
 
             drawLine({ x : margin.left, y: yPos, x2: xMax + margin.left, y2: yPos}, '#E8E8E8');
             if(shouldRenderText){
@@ -98,8 +109,15 @@ var canvasChart = function(){
                 txt = Math.ceil((maxXValue / 20) *100 * i) / 100;
                 txtSize = ctx.measureText(txt);
                 ctx.fillText(txt, xPos, yMax + margin.top + (margin.bottom / 3));
+                xPos += xInc;
                
             }
+        }
+
+        if(shouldRenderText){
+            txt = Math.ceil((maxXValue / 20) *100 * i) / 100;
+            txtSize = ctx.measureText(txt);
+            ctx.fillText(txt, xPos, yMax + margin.top + (margin.bottom / 3));
         }
 
         drawLine({ x: margin.left, y: margin.top, x2: margin.left, y2: yMax + margin.top});
@@ -127,7 +145,7 @@ var canvasChart = function(){
             var y = 0;
             
             y = (maxYValue - army) * ratio + margin.top ;
-            x = (maxXValue - oil) * xRatio + margin.left;
+            x = oil * xRatio + margin.left;
             
              population = getPointRadius(set.population)
             var dataPoint = { x: x, y: y, population : population};
@@ -136,27 +154,6 @@ var canvasChart = function(){
             drawPoints();
 
         }
-
-
-        // for(var i = 0; i < data.dataPoints.length; i++){
-        //     pt = data.dataPoints[i];
-        //     var x = 0;
-        //     var y = 0;
-        //     y = (maxYValue - pt.y) * ratio;
-        //     if( y < margin.top) y = margin.top;
-        //      x = (i * xInc) + margin.left;
-        //      population = getPointRadius(12345123)
-
-        //     var dataPoint = { x: x, y: y, currX: margin.left, x2: prevX, y2: prevY, originalY : pt.y, population : population};
-        //     finalDataPoints.push(dataPoint);
-
-        //     prevX = x;
-        //     prevY = y;
-
-        //     // if(data.renderTypes.contains(renderType.lines)) 
-        //     drawLines();
-        //     drawPoints();
-        // }
     },
 
     drawLines = function(){
@@ -209,44 +206,26 @@ var canvasChart = function(){
 
     },
 
-    getMaxYValue = function(){
-        var maxY = 0;
-        for(var year in data_set){
-            for (var country in data_set[year]){
-                if (maxY < data_set[year][country].army)
-                maxY = data_set[year][country].army
-            }
-            break;
+    getAllTimeAttributeMaxValue = function(countries, attribute){
+        var max = 0;
+        for (var year in data){
+            var localAttributeMaxValue = getAttributeMaxValue(year, countries, attribute);
+            if (max < localAttributeMaxValue)
+            max = localAttributeMaxValue;
         }
-        return maxY;
+        return max;
+    }
+    getAttributeMaxValue = function(year, countries, attribute, data){
+        var max = 0;
+        for(var country in data[year]){
+            if (max < data[year][country][attribute])
+                max = data[year][country][attribute]
+        }
+        return max;
     },
 
-    getMaxXValue = function(){
-        var maxX = 0;
-        for(var year in data_set){
-            for (var country in data_set[year]){
-                if (maxX < data_set[year][country].oil)
-                maxX = data_set[year][country].oil
-            }
-            break;
-        }
-        return maxX;
-    },
-
-    getMaxPopulation = function(){
-        var maxPop = 0;
-        for(var year in data_set){
-            for (var country in data_set[year]){
-                if (maxPop < data_set[year][country].population)
-                    maxPop = data_set[year][country].population
-            }
-            break;
-        }
-        console.log(maxPop)
-        return maxPop;
-    },
     getPointRadius = function (pointPopulation){
-        return pointPopulation / maxPop * pointRadius / 40;
+        return pointPopulation / maxZValue * pointRadius / 40;
     },
 
     createOverlay = function(){
