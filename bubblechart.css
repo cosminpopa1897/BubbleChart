@@ -1,0 +1,35 @@
+#BubbleChart{
+    display: inline-block;
+}
+
+select{
+    width: 160px !important;
+    max-width: 160px;
+}
+
+#controlContainer{
+    position: absolute;
+    display: inline-block;
+    top: 125px;
+    left: 920px;
+    width: 100%;
+}
+.countrySelector{
+    width: 160px !important;
+    max-width: 160px;
+
+}
+
+.selectorSection{
+    display: inline-block;
+    margin-left: 45px;
+}
+.controlButton{
+   display: block!important;
+   margin-top:20px;
+    width:40%;
+}
+
+.buttonDiv{
+   padding-left: 14%;
+}

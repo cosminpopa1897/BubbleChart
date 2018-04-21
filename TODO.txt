@@ -1,16 +1,22 @@
--modifica labeluri
--pune valori pe margini
--urca dataPOinturile
+-modifica labeluri done
+-pune valori pe margini done 
+-urca dataPOinturile done
 
 
-    var oil = 0;
-            var army = 0;
-            var population = 0;
-            var year = 0;
+--creeaza overlay
+    -copiaza
+    -adapteaza
+        -pozitionare in functie de raza
 
-        for(country in data_set["1989"]){
-            var set = data_set["1989"][country];
-            oil = set.oil;
-            army = set.army;
-            population = set.population;
-        }
+-creeaza control
+    -alegere tari
+        -creare si populare selecturi
+    -alegere atribute
+        -creare selecturi
+        -creare labeluri 
+        -modificare set de date 
+    -alegere an
+    -afisare tabel
+    -animatie
+        -desenare doar puncte
+        -toti anii

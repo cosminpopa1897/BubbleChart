@@ -2,6 +2,9 @@ var canvasChart = function(){
 
     var ctx,
     margin = {top: 100, left: 75, right:100, bottom: 75},
+    xKey,
+    yKey,
+    zKey,
     maxYValue = 0, 
     maxXValue = 0,
     ratio = 0,
@@ -12,9 +15,25 @@ var canvasChart = function(){
     timerID,
     overlayDiv,
     maxZValue = 0,
+    
+    AppendConfig = function(data, config){
+        data_set.title = config.title;
+        data_set.animationPoints = config.animationPoints;
+        data_set.animationSpeed = config.animationSpeed;
+        data_set.xLabel = config.xLabel;
+        data_set.yLabel = config.yLabel;
+        data_set.labelFont = config.labelFont;
+        data_set.dataPointFont = config.dataPointFont;
+        data_set.renderTypes = config.renderTypes;
+    },
 
-    render = function(canvasID, dataObj){
+    render = function(canvasID, dataObj, config){
          data = dataObj;
+         AppendConfig(data, config);
+         xKey = config.keys.x;
+         yKey = config.keys.y;
+         zKey = config.keys.z;
+
          createOverlay();
          var canvas = document.getElementById(canvasID);
          chartHeight = canvas.getAttribute('height');
@@ -27,10 +46,10 @@ var canvasChart = function(){
           yMax = chartHeight - (margin.top + margin.bottom);
           //Delete at refactoring
           var year = '1989';
-          var countries =Object.keys(data_set[year]);
-         maxYValue = Math.ceil(getAttributeMaxValue(year, countries, 'army', data_set));
-         maxXValue = getAttributeMaxValue(year, countries, 'oil', data_set);
-         maxZValue = getAttributeMaxValue(year, countries, 'population', data_set);
+          var countries =Object.keys(data[year]);
+         maxYValue = Math.ceil(getAttributeMaxValue(year, countries, yKey, data));
+         maxXValue = getAttributeMaxValue(year, countries, xKey, data);
+         maxZValue = getAttributeMaxValue(year, countries, zKey, data);
          maxRadius = getPointRadius(maxZValue);
 
          ratio = yMax / maxYValue;
@@ -101,7 +120,6 @@ var canvasChart = function(){
             if(shouldRenderText){
                 ctx.font = (data.dataPointFont != null) ? data.dataPointFont : '10pt Calibri';
                 var txt =  Math.ceil( (ceiledYMaxValue - (ceiledYMaxValue / 20) * (i+1))*100) / 100;
-                debugger
                 var txtSize = ctx.measureText(txt);
                 ctx.fillText(txt, margin.left - ((txtSize.width >= 14) ? txtSize.width: 10) -7 , yPos + 4);
                 
@@ -129,26 +147,21 @@ var canvasChart = function(){
         var xInc = getXInc(),
             prevX = 0,
             prevY = 0;
-            var oil = 0;
-            var army = 0;
-            var population = 0;
+           
             var year = 0;
             var entryNumber = 0;
-        for(country in data_set["1989"]){
+        for(country in data["1989"]){
             entryNumber ++ ;
-            var set = data_set["1989"][country];
-            oil = set.oil;
-            army = set.army;
-            population = set.population;
+            var pt = data["1989"][country];
+            
 
             var x = 0;
             var y = 0;
             
-            y = (maxYValue - army) * ratio + margin.top ;
-            x = oil * xRatio + margin.left;
-            
-             population = getPointRadius(set.population)
-            var dataPoint = { x: x, y: y, population : population};
+            y = (maxYValue - pt.army) * ratio + margin.top ;
+            x = pt.oil * xRatio + margin.left;
+            var z = getPointRadius(pt.population)
+            var dataPoint = { x: x, y: y, z : z};
             finalDataPoints.push(dataPoint);
 
             drawPoints();
@@ -176,7 +189,7 @@ var canvasChart = function(){
     drawPoints = function(){
         for (var i = 0; i < finalDataPoints.length; i++){
             var pt = finalDataPoints[i];
-            renderCircle(pt.x, pt.y, null, pt.population);
+            renderCircle(pt.x, pt.y, null, pt.z);
         }
     },
 
@@ -199,7 +212,7 @@ var canvasChart = function(){
     },
 
     getXInc = function(){
-        return Math.round(xMax / Object.keys(data_set).length) -1;
+        return Math.round(xMax / Object.keys(data).length) -1;
     },
 
     mouseMove = function(){

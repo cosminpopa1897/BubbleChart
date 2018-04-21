@@ -1,16 +1,23 @@
 <html>
+<link rel="stylesheet" type="text/css" href="bubblechart.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy"
+    crossorigin="anonymous">
+
 <body>
-        <!-- style="background-color: #efefef" -->
-    <canvas id="BubbleChart"  width="800" height="800"  >
+    <!-- style="background-color: #efefef" -->
+    <canvas id="BubbleChart" width="800" height="800">
         Canvas not supported
     </canvas>
+    <script type="text/javascript" src="jquery.min.js"></script>
     <script type="text/javascript" src="bubblechart.js"></script>
     <script type="text/javascript" src="data.js"></script>
+    <script type="text/javascript" src="control.js"></script>
+
     <script type="text/javascript">
 
-        window.onload = function(){
+        window.onload = function () {
             var chart = new canvasChart();
-            
+
             var config = {};
             config.title = "US Population Chart";
             config.animationPoints = true;
@@ -20,6 +27,11 @@
             config.labelFont = '19pt Arial';
             config.dataPointFont = '10pt Arial';
             config.renderTypes = [chart.renderType.lines, chart.renderType.points];
+            config.keys = {
+                x: "oil",
+                y: "army",
+                z: "population"
+            }
 
             var dataAndSettings = {
                 title: "US Population Chart",
@@ -31,27 +43,98 @@
                 dataPointFont: '10pt Arial',
                 renderTypes: [chart.renderType.lines, chart.renderType.points],
                 dataPoints: [
-                   { x: '1790', y: 3.9, z:2},
-                   { x: '1810', y: 7.2, z:3},
-                   { x: '1830', y: 12.8, z:4},
-                   { x: '1850', y: 23.1, z:5}
+                    { x: '1790', y: 3.9, z: 2 },
+                    { x: '1810', y: 7.2, z: 3 },
+                    { x: '1830', y: 12.8, z: 4 },
+                    { x: '1850', y: 23.1, z: 5 }
                 ]
             };
-            AppendConfig(dataAndSettings, config)
-            chart.render('BubbleChart', dataAndSettings);
+            chart.render('BubbleChart', data_set, config);
         }
 
-        function AppendConfig(data, config){
-            data_set.title = config.title;
-            data_set.animationPoints = config.animationPoints;
-            data_set.animationSpeed = config.animationSpeed;
-            data_set.xLabel = config.xLabel;
-            data_set.yLabel = config.yLabel;
-            data_set.labelFont = config.labelFont;
-            data_set.dataPointFont = config.dataPointFont;
-            data_set.renderTypes = config.renderTypes;
-        }
     </script>
+
+
+
+
+    <div class="container" id="controlContainer">
+
+
+        <div id="countries">
+            <div class="form-group countriesSection selectorSection">
+                <label for="firstCountrySelector">Select First Country:</label>
+                <select class="form-control countrySelector" id="firstCountrySelector">
+                    <option>Sua</option>
+                    <option>Rusia</option>
+                    <option>UK</option>
+                </select>
+            </div>
+            <div class="form-group countriesSection selectorSection">
+                <label for="secondCountrySelector">Select Second Country:</label>
+                <select class="form-control countrySelector" id="secondCountrySelector">
+                    <option>Sua</option>
+                    <option>Rusia</option>
+                    <option>UK</option>
+                </select>
+            </div>
+            <div class="form-group countriesSection selectorSection">
+                <label for="thirdCountrySelector">Select Third Country:</label>
+                <select class="form-control countrySelector" id="thirdCountrySelector">
+                    <option>Sua</option>
+                    <option>Rusia</option>
+                    <option>UK</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="attributes">
+            <div class="form-group attributesSection selectorSection">
+                <label for="xAttribute">Select X Attribute:</label>
+                <select class="form-control attributeSelector " id="xAttribute">
+                    <option>Gassadflsjfd asdfl kj slfkj afelkjf wlkjafe </option>
+                    <option>Gassadflsjfd asdf sdf sdaf sf asdfl kj slfkj afelkjf wlkjafe </option>
+                    <option>askudfhlk sdhfkl ahsdkf sdfkl jhsadklfh sdklfj hsladfh salkfh sladkfh salkdfhslkdfj hklsadf </option>
+                </select>
+            </div>
+            <div class="form-group attributesSection selectorSection">
+                <label for="yAttribute">Select Y Attribute:</label>
+                <select class="form-control attributeSelector " id="yAttribute">
+                    <option>Gassadflsjfd asdfl kj slfkj afelkjf wlkjafe </option>
+                    <option>Gassadflsjfd asdf sdf sdaf sf asdfl kj slfkj afelkjf wlkjafe </option>
+                    <option>askudfhlk sdhfkl ahsdkf sdfkl jhsadklfh sdklfj hsladfh salkfh sladkfh salkdfhslkdfj hklsadf </option>
+                </select>
+            </div>
+            <div class="form-group attributesSection selectorSection">
+                <label for="zAttribute">Select Z Attribute:</label>
+                <select class="form-control attributeSelector " id="zAttribute">
+                    <option>Gassadflsjfd asdfl kj slfkj afelkjf wlkjafe </option>
+                    <option>Gassadflsjfd asdf sdf sdaf sf asdfl kj slfkj afelkjf wlkjafe </option>
+                    <option>askudfhlk sdhfkl ahsdkf sdfkl jhsadklfh sdklfj hsladfh salkfh sladkfh salkdfhslkdfj hklsadf </option>
+                </select>
+            </div>
+        </div>
+
+        <div id="year">
+            <div class="form-group yearSection selectorSection">
+                <label for="yearSelector ">Select a year</label>
+                <select class="form-control " id=" yearSelector">
+                    <option>1989</option>
+                    <option>1989</option>
+                    <option>1989</option>
+                    <option>1989</option>
+                    <option>1989</option>
+                    <option>1989</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="buttonDiv">
+            <input type="button" class="btn btn-success controlButton" id="generateButton" value="Generate">
+            <input type="button" class="btn btn-success controlButton" id="animateButton" value="Animate Chart">
+            
+        </div>
+
+    </div>
 </body>
 
 </html>
