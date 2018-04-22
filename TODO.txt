@@ -3,10 +3,6 @@
 -urca dataPOinturile done
 
 
---creeaza overlay
-    -copiaza
-    -adapteaza
-        -pozitionare in functie de raza
 
 -creeaza control
     -alegere tari
@@ -20,3 +16,26 @@
     -animatie
         -desenare doar puncte
         -toti anii
+
+
+
+culori:
+    -albastru :#0000FF
+    -red : #FF0000
+    -green : #00FF00
+
+
+
+Ramase
+--creeaza overlay
+    -copiaza
+    -adapteaza
+        -pozitionare in functie de raza
+
+--Umbla la raza
+--Debug Scalare
+--Arata anul(optional)
+--Selecteaza doar un an
+--Afiseaza tabel
+--Schimba labeluri
+

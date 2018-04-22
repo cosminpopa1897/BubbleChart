@@ -5,20 +5,45 @@
 
 <body>
     <!-- style="background-color: #efefef" -->
-    <canvas id="BubbleChart" width="800" height="800">
-        Canvas not supported
-    </canvas>
+    <div id="chart">
+        <canvas id="BubbleChart" width="1000" height="1000">
+            Canvas not supported
+        </canvas>
+    </div>
     <script type="text/javascript" src="jquery.min.js"></script>
     <script type="text/javascript" src="bubblechart.js"></script>
     <script type="text/javascript" src="data.js"></script>
     <script type="text/javascript" src="control.js"></script>
 
     <script type="text/javascript">
-
+        var chart = null;
+        chart = new canvasChart();
         window.onload = function () {
-            var chart = new canvasChart();
+            chart = new canvasChart();
+            resources = {
+                availableCountries: getAvailableCountries(data_set),
+                availableAttributes: getAvailableAttributes(data_set),
+                availableYears: getAvailableYears(data_set),
+                selectedCountries: {
+                    first: null,
+                    second: null,
+                    third: null
+                },
+                selectedAttributes: {
+                    x: null,
+                    y: null,
+                    z: null
+                },
+                selectedYear: {
+                    start: null,
+                    finish: null
+                },
+                singleYear : null
 
-            var config = {};
+            }
+            initializeSelectedValues(resources)
+
+            config = {};
             config.title = "US Population Chart";
             config.animationPoints = true;
             config.animationSpeed = 20;
@@ -27,29 +52,22 @@
             config.labelFont = '19pt Arial';
             config.dataPointFont = '10pt Arial';
             config.renderTypes = [chart.renderType.lines, chart.renderType.points];
-            config.keys = {
-                x: "oil",
-                y: "army",
-                z: "population"
-            }
+            
 
-            var dataAndSettings = {
-                title: "US Population Chart",
-                animationPoints: true,
-                animationSpeed: 20,
-                xLabel: 'Oil per capita consumption',
-                yLabel: 'Army GDP percent Spending',
-                labelFont: '19pt Arial',
-                dataPointFont: '10pt Arial',
-                renderTypes: [chart.renderType.lines, chart.renderType.points],
-                dataPoints: [
-                    { x: '1790', y: 3.9, z: 2 },
-                    { x: '1810', y: 7.2, z: 3 },
-                    { x: '1830', y: 12.8, z: 4 },
-                    { x: '1850', y: 23.1, z: 5 }
-                ]
-            };
-            chart.render('BubbleChart', data_set, config);
+
+            chart.render('BubbleChart', data_set, config, resources, false);
+        }
+
+        function initializeSelectedValues(resources) {
+            resources.selectedCountries.first = resources.availableCountries[0];
+            resources.selectedCountries.second = resources.availableCountries[1];
+            resources.selectedCountries.third = resources.availableCountries[2];
+            resources.selectedAttributes.x = resources.availableAttributes[0];
+            resources.selectedAttributes.y = resources.availableAttributes[1];
+            resources.selectedAttributes.z = resources.availableAttributes[2];
+            resources.selectedYear.start = resources.availableYears[0];
+            resources.selectedYear.finish = resources.availableYears[1];
+            resources.singleYear = "1989";
         }
 
     </script>
@@ -116,8 +134,20 @@
 
         <div id="year">
             <div class="form-group yearSection selectorSection">
-                <label for="yearSelector ">Select a year</label>
-                <select class="form-control " id=" yearSelector">
+                <label for="startingYear">Select starting year</label>
+                <select class="form-control yearSelector" id="startingYear">
+                    <option>1989</option>
+                    <option>1989</option>
+                    <option>1989</option>
+                    <option>1989</option>
+                    <option>1989</option>
+                    <option>1989</option>
+                </select>
+            </div>
+
+            <div class="form-group yearSection selectorSection">
+                <label for="lastYear">Select last year</label>
+                <select class="form-control yearSelector " id="lastYear">
                     <option>1989</option>
                     <option>1989</option>
                     <option>1989</option>
@@ -129,11 +159,22 @@
         </div>
 
         <div class="buttonDiv">
-            <input type="button" class="btn btn-success controlButton" id="generateButton" value="Generate">
-            <input type="button" class="btn btn-success controlButton" id="animateButton" value="Animate Chart">
-            
+            <button class="btn btn-success controlButton" id="generateButton">Generate</button>
+            <button class="btn btn-success controlButton" id="animateButton">Animate</button>
+
         </div>
 
+    </div>
+
+    <div class="data">
+        <table class="dataTable">
+            <thead>
+
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
     </div>
 </body>
 
