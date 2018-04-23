@@ -12,6 +12,7 @@
     </div>
     <script type="text/javascript" src="jquery.min.js"></script>
     <script type="text/javascript" src="bubblechart.js"></script>
+    <script type="text/javascript" src="dataLabels.js"></script>
     <script type="text/javascript" src="data.js"></script>
     <script type="text/javascript" src="control.js"></script>
 
@@ -44,7 +45,7 @@
             initializeSelectedValues(resources)
 
             config = {};
-            config.title = "US Population Chart";
+            config.title = "1989";
             config.animationPoints = true;
             config.animationSpeed = 20;
             config.xLabel = 'Oil per capita consumption';
@@ -82,25 +83,16 @@
             <div class="form-group countriesSection selectorSection">
                 <label for="firstCountrySelector">Select First Country:</label>
                 <select class="form-control countrySelector" id="firstCountrySelector">
-                    <option>Sua</option>
-                    <option>Rusia</option>
-                    <option>UK</option>
                 </select>
             </div>
             <div class="form-group countriesSection selectorSection">
                 <label for="secondCountrySelector">Select Second Country:</label>
                 <select class="form-control countrySelector" id="secondCountrySelector">
-                    <option>Sua</option>
-                    <option>Rusia</option>
-                    <option>UK</option>
                 </select>
             </div>
             <div class="form-group countriesSection selectorSection">
                 <label for="thirdCountrySelector">Select Third Country:</label>
                 <select class="form-control countrySelector" id="thirdCountrySelector">
-                    <option>Sua</option>
-                    <option>Rusia</option>
-                    <option>UK</option>
                 </select>
             </div>
         </div>
@@ -109,60 +101,47 @@
             <div class="form-group attributesSection selectorSection">
                 <label for="xAttribute">Select X Attribute:</label>
                 <select class="form-control attributeSelector " id="xAttribute">
-                    <option>Gassadflsjfd asdfl kj slfkj afelkjf wlkjafe </option>
-                    <option>Gassadflsjfd asdf sdf sdaf sf asdfl kj slfkj afelkjf wlkjafe </option>
-                    <option>askudfhlk sdhfkl ahsdkf sdfkl jhsadklfh sdklfj hsladfh salkfh sladkfh salkdfhslkdfj hklsadf </option>
                 </select>
             </div>
             <div class="form-group attributesSection selectorSection">
                 <label for="yAttribute">Select Y Attribute:</label>
                 <select class="form-control attributeSelector " id="yAttribute">
-                    <option>Gassadflsjfd asdfl kj slfkj afelkjf wlkjafe </option>
-                    <option>Gassadflsjfd asdf sdf sdaf sf asdfl kj slfkj afelkjf wlkjafe </option>
-                    <option>askudfhlk sdhfkl ahsdkf sdfkl jhsadklfh sdklfj hsladfh salkfh sladkfh salkdfhslkdfj hklsadf </option>
                 </select>
             </div>
             <div class="form-group attributesSection selectorSection">
                 <label for="zAttribute">Select Z Attribute:</label>
                 <select class="form-control attributeSelector " id="zAttribute">
-                    <option>Gassadflsjfd asdfl kj slfkj afelkjf wlkjafe </option>
-                    <option>Gassadflsjfd asdf sdf sdaf sf asdfl kj slfkj afelkjf wlkjafe </option>
-                    <option>askudfhlk sdhfkl ahsdkf sdfkl jhsadklfh sdklfj hsladfh salkfh sladkfh salkdfhslkdfj hklsadf </option>
                 </select>
             </div>
         </div>
 
         <div id="year">
+            <div >
             <div class="form-group yearSection selectorSection">
                 <label for="startingYear">Select starting year</label>
                 <select class="form-control yearSelector" id="startingYear">
-                    <option>1989</option>
-                    <option>1989</option>
-                    <option>1989</option>
-                    <option>1989</option>
-                    <option>1989</option>
-                    <option>1989</option>
                 </select>
             </div>
 
             <div class="form-group yearSection selectorSection">
                 <label for="lastYear">Select last year</label>
                 <select class="form-control yearSelector " id="lastYear">
-                    <option>1989</option>
-                    <option>1989</option>
-                    <option>1989</option>
-                    <option>1989</option>
-                    <option>1989</option>
-                    <option>1989</option>
+                    
                 </select>
             </div>
         </div>
-
-        <div class="buttonDiv">
-            <button class="btn btn-success controlButton" id="generateButton">Generate</button>
-            <button class="btn btn-success controlButton" id="animateButton">Animate</button>
-
         </div>
+
+            <div style="display : inline-block"> 
+                <button class="btn btn-success controlButton" id="animateButton">Animate</button>
+            </div>
+
+            <div >
+                    <button class="btn btn-success controlButton" id="generateButton">Generate single year chart</button>
+                </div>
+        </div>
+
+     
 
     </div>
 

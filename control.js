@@ -31,20 +31,31 @@ function getAvailableAttributes(data) {
 }
 
 
-function populateSelector(collection, selectClass, isAttribute) {
-    $("." + selectClass).empty()
+function populateSelector(collection, selectClass, isAttribute, isCountry) {
+    $("." + selectClass).empty();
+    var selected = "";
+    var html=`<option value=""></option>`;
+    debugger
+    if(isCountry) 
+        $("." + selectClass).append(html);
     for (var index in collection) {
-        var html = `{<option value='${collection[index]}' =>${collection[index]}</option>}`
+        
+        if (isAttribute)
+            html = `{<option value='${collection[index]}' =>${data_labels[collection[index]]}</option>}`;
+        else 
+            html = `{<option value='${collection[index]}' =>${collection[index]}</option>}`;
+            
         $("." + selectClass).append(html)
     }
 }
 
+
 function populateCountries(countries) {
-    populateSelector(countries, "countrySelector")
+    populateSelector(countries, "countrySelector", false, true )
 }
 
 function populateAttributes(attributes) {
-    populateSelector(attributes, "attributeSelector")
+    populateSelector(attributes, "attributeSelector", isAttribute = true)
 }
 
 function populateYears(years) {
@@ -89,11 +100,13 @@ function changeDataAttribute(event) {
         case "xAttribute":
             {
                 resources.selectedAttributes.x = selectedAttribute;
+                config.xLabel = data_labels[selectedAttribute];
                 break;
             }
         case "yAttribute":
             {
                 resources.selectedAttributes.y = selectedAttribute;
+                config.yLabel = data_labels[selectedAttribute];
                 break;
             }
         case "zAttribute":
@@ -144,6 +157,7 @@ function animateChart(years, index) {
     if (index == years.length - 1)
         return;
     resources.singleYear = years[index];
+    config.title = resources.singleYear;
     chart.render('BubbleChart', data_set, config, resources, true);
     setTimeout(function(){animateChart(years, index + 1)}, 1000)
 }

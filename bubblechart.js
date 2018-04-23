@@ -9,7 +9,7 @@ var canvasChart = function () {
         maxYValue = 0,
         maxXValue = 0,
         ratio = 0,
-        pointRadius = 20,
+        pointRadius = 150,
         renderType = { lines: 'lines', points: 'points' },
         finalDataPoints = [],
         selectedDataPoint = null,
@@ -35,7 +35,7 @@ var canvasChart = function () {
         render = function (canvasID, dataObj, configObj, resources, IsSingleYear) {
             data = dataObj;
             config = configObj;
-            AppendConfig(data, config);
+           
             xKey = resources.selectedAttributes.x;
             yKey = resources.selectedAttributes.y;
             zKey = resources.selectedAttributes.z;
@@ -85,8 +85,8 @@ var canvasChart = function () {
         renderParts = function () {
             renderBackround();
             renderText();
-            renderLinesAndLabels(true);
             renderData();
+            renderLinesAndLabels(true);
         },
 
         renderBackround = function () {
@@ -108,7 +108,7 @@ var canvasChart = function () {
 
             ctx.fillText(config.title, (chartWidth / 2), margin.top / 2);
 
-            var txtSize = ctx.measureText(data.xLabel);
+            var txtSize = ctx.measureText(config.xLabel);
             ctx.fillText(config.xLabel, margin.left + (xMax / 2), yMax + margin.top / 1.2 + (margin.bottom / 1.2));
 
             ctx.save();
@@ -136,6 +136,7 @@ var canvasChart = function () {
 
                 drawLine({ x: margin.left, y: yPos, x2: xMax + margin.left, y2: yPos }, '#E8E8E8');
                 if (shouldRenderText) {
+                    ctx.fillStyle = 'black';
                     ctx.font = (config.dataPointFont != null) ? config.dataPointFont : '10pt Calibri';
                     var txt = Math.ceil((ceiledYMaxValue - (ceiledYMaxValue / 20) * (i + 1)) * 100) / 100;
                     var txtSize = ctx.measureText(txt);
@@ -166,7 +167,6 @@ var canvasChart = function () {
                 prevX = 0,
                 prevY = 0;
             var yearIterator = [];
-            debugger
             if (isSingleYear)
                 yearIterator.push(singleYear)
             else
@@ -220,6 +220,8 @@ var canvasChart = function () {
         },
 
         drawPoints = function () {
+            debugger
+            orderPointsByRadius(finalDataPoints);
             for (var i = 0; i < finalDataPoints.length; i++) {
                 var pt = finalDataPoints[i];
                 renderCircle(pt.x, pt.y, pt.color, pt.z);
@@ -264,16 +266,25 @@ var canvasChart = function () {
     getAttributeMaxValue = function (year, countries, attribute, data) {
         var max = 0;
         for (var country in data[year]) {
-            if (max < data[year][country][attribute])
-                max = data[year][country][attribute]
+            if (max < parseFloat(data[year][country][attribute]))
+                max = parseFloat(data[year][country][attribute])
         }
         return max;
     },
 
-        getPointRadius = function (pointPopulation) {
-            return pointPopulation / maxZValue * pointRadius / 20;
+        getPointRadius = function (zPoint) {
+            return  (zPoint / maxZValue  ) * pointRadius;
         },
 
+    orderPointsByRadius = function(dataPoints){
+        dataPoints.sort(function(a,b){
+            if(a.z > b.z) 
+                return -1; 
+            if(a.z < b.z) 
+                return 1; 
+            return 0;
+        });
+    },
 
 
         createOverlay = function () {

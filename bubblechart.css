@@ -33,3 +33,9 @@ select{
 .buttonDiv{
    padding-left: 14%;
 }
+
+#animateButton{
+    width: 160px;
+    margin-left: 45px;
+    
+}
