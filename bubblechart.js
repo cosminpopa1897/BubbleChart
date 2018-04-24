@@ -2,7 +2,7 @@
 var canvasChart = function () {
 
     var ctx,
-        margin = { top: 100, left: 75, right: 100, bottom: 75 },
+        margin = { top: 100, left: 150, right: 100, bottom: 75 },
         xKey,
         yKey,
         zKey,

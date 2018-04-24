@@ -26,6 +26,7 @@ function getAvailableCountries(data) {
 }
 
 function getAvailableAttributes(data) {
+    debugger
     for (var year in data) {
         for (var country in data[year]) {
             return Object.keys(data[year][country])
@@ -237,10 +238,11 @@ function getHeaders(){
 
 function getData(country){
     var tableData = [];
-    for(var year in data_set){
-        let yearData = data_set[year][country];
+    var years = getYearsRange(resources.selectedYear.start, resources.selectedYear.finish)
+    for(var year in years){
+        let yearData = data_set[years[year]][country];
         let tableElement = {};
-        tableElement.year = year;
+        tableElement.year = years[year];
         for (var attribute in data_set[year][country]){
             tableElement[attribute] = data_set[year][country][attribute];
         }
