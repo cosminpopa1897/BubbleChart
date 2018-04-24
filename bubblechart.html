@@ -54,9 +54,9 @@
             config.dataPointFont = '10pt Arial';
             config.renderTypes = [chart.renderType.lines, chart.renderType.points];
             
-
-
             chart.render('BubbleChart', data_set, config, resources, false);
+
+            
         }
 
         function initializeSelectedValues(resources) {
@@ -116,44 +116,50 @@
         </div>
 
         <div id="year">
-            <div >
-            <div class="form-group yearSection selectorSection">
-                <label for="startingYear">Select starting year</label>
-                <select class="form-control yearSelector" id="startingYear">
-                </select>
-            </div>
-
-            <div class="form-group yearSection selectorSection">
-                <label for="lastYear">Select last year</label>
-                <select class="form-control yearSelector " id="lastYear">
-                    
-                </select>
-            </div>
-        </div>
-        </div>
-
-            <div style="display : inline-block"> 
-                <button class="btn btn-success controlButton" id="animateButton">Animate</button>
-            </div>
-
-            <div >
-                    <button class="btn btn-success controlButton" id="generateButton">Generate single year chart</button>
+            <div style="display : inline-block">
+                <div class="form-group  labelSection">
+                    <label for="startingYear">Select starting year</label>
+                    <label for="lastYear">Select last year</label>
                 </div>
+                
+                <div class="form-group yearSection selectorSection">
+                    <select class="form-control yearSelector" id="startingYear">
+                        
+                    </select>
+                            <select class="form-control yearSelector " id="lastYear">
+                            </select>
+                </div>
+            </div>
+
+            <div style="display:inline-block">
+                    <button class="btn btn-success controlButton" id="animateButton">Animate</button>
+
+                    <button class="btn btn-success controlButton" id="generateMultipleButton">Multiple Years</button>
+            </div>
         </div>
-
-     
-
+        <div id = "singleYear">
+            <div class="form-group labelSection">
+                <label for="singleYearSelector">Choose single year:</label>
+            </div>
+            <div class="form-group selectorSection yearSection  ">
+                    <select class="form-control yearSelector" name="singleYearSelector" id="singleYearSelector"></select>
+            </div>
+        
+                <div style="display:inline-block">
+                    <button class="btn btn-success controlButton" id="generateButton">Single Year</button>
+                </div>
+        
+                </div>
+        <div>
+            <button class="btn btn-success controlButton" id="generateTable">Generate Table</button>
+        </div>
+        
     </div>
+    
+  
 
-    <div class="data">
-        <table class="dataTable">
-            <thead>
-
-            </thead>
-            <tbody>
-
-            </tbody>
-        </table>
+    <div id = "data">
+        
     </div>
 </body>
 

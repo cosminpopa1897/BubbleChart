@@ -106,10 +106,10 @@ var canvasChart = function () {
             ctx.font = labelFont;
             ctx.textAlign = "center";
 
-            ctx.fillText(config.title, (chartWidth / 2), margin.top / 2);
+            ctx.fillText(config.title, (chartWidth / 2.5) , margin.top / 2);
 
             var txtSize = ctx.measureText(config.xLabel);
-            ctx.fillText(config.xLabel, margin.left + (xMax / 2), yMax + margin.top / 1.2 + (margin.bottom / 1.2));
+            ctx.fillText(config.xLabel, margin.left + (xMax / 2), yMax + margin.top / 1.1 + (margin.bottom / 1.1));
 
             ctx.save();
             ctx.rotate(-Math.PI / 2);

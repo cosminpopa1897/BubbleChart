@@ -9,7 +9,10 @@ $(document).ready(function () {
     $(".attributeSelector").on("change", changeDataAttribute)
     $(".yearSelector").on("change", changeDataYear)
     $("#generateButton").on("click", generateChart)
+    $("#generateMultipleButton").on("click", function () { chart.render('BubbleChart', data_set, config, resources, false);})
     $("#animateButton").on("click", function(){animateChart(yearsForAnimation, 0)})
+    $("#generateTable").on("click", populateTable )
+    setInitialDropdownValues();
 })
 
 
@@ -41,9 +44,9 @@ function populateSelector(collection, selectClass, isAttribute, isCountry) {
     for (var index in collection) {
         
         if (isAttribute)
-            html = `{<option value='${collection[index]}' =>${data_labels[collection[index]]}</option>}`;
+            html = `<option value='${collection[index]}' >${data_labels[collection[index]]}</option>`;
         else 
-            html = `{<option value='${collection[index]}' =>${collection[index]}</option>}`;
+            html = `<option value='${collection[index]}' >${collection[index]}</option>`;
             
         $("." + selectClass).append(html)
     }
@@ -134,13 +137,17 @@ function changeDataYear(event) {
             resources.selectedYear.finish = selectedYear;
             break;
         }
+        case 'singleYearSelector': {
+            resources.singleYear = selectedYear;
+            break;
+        }
         default:
             break;
     }
-    resources.singleYear = resources.selectedYear.start;
     yearsForAnimation = getYearsRange(resources.selectedYear.start, resources.selectedYear.finish)
-    debugger
 }
+
+
 getYearsRange = function (startYear, finishYear) {
     var years = []
     for (var year = parseInt(startYear); year <= parseInt(finishYear); year++) {
@@ -162,3 +169,94 @@ function animateChart(years, index) {
     setTimeout(function(){animateChart(years, index + 1)}, 1000)
 }
 
+function buildHeader(header){
+    return `<th>${header}</th>`;
+}
+
+function buildCell(dictionary){
+    var html = "<tr>";
+    for(var attribute in dictionary)
+        html += `<td>${dictionary[attribute]}</td>`
+    html+="</tr>"
+    return html;
+}
+
+
+function buildRow(collection, callback){
+    var html = `<tr>`;
+    for( var i  = 0 ; i< collection.length; i++)
+        html += callback(collection[i])
+    html +=`</tr>`
+    return html;
+}
+
+function buildCellRow(collection){
+   return buildRow(collection, buildCell);
+}
+
+function buildHeaderRow(collection){
+    return buildRow(collection, buildHeader)
+}
+
+function builTable(tableHeaders, tableData){
+    var html = "<table class = 'table'>";
+    html += buildHeaderRow(tableHeaders);
+    html += buildCellRow(tableData);
+    html += "</table>";
+    return html;
+}
+
+function populateTable(){
+    var $dataSection = $("#data");
+    $dataSection.empty();
+    var html = "";
+    var headers = getHeaders();
+    for (var country in resources.selectedCountries){
+        let tableData = getData(resources.selectedCountries[country]);
+        html += `<h2>${resources.selectedCountries[country]}</h2>`;
+        html += builTable(headers, tableData)
+    }
+
+    $dataSection.append(html)
+}
+
+function getHeaders(){
+    var headers = ["Year"];
+    for(var year in data_set){
+        for(var country in data_set[year]){
+            var attributes = Object.keys(data_set[year][country])
+            for(var i = 0; i<attributes.length; i++){
+                headers.push(data_labels[attributes[i]]);
+            }
+            break;
+        }
+        break;
+    }
+    return headers
+}
+
+function getData(country){
+    var tableData = [];
+    for(var year in data_set){
+        let yearData = data_set[year][country];
+        let tableElement = {};
+        tableElement.year = year;
+        for (var attribute in data_set[year][country]){
+            tableElement[attribute] = data_set[year][country][attribute];
+        }
+        tableData.push(tableElement);
+    }
+    return tableData;
+}
+
+function setInitialDropdownValues(){
+   $("#firstCountrySelector").val(resources.selectedCountries.first) 
+   $("#secondCountrySelector").val(resources.selectedCountries.second) 
+   $("#thirdCountrySelector").val(resources.selectedCountries.third)
+   $("#xAttribute").val(resources.selectedAttributes.x) 
+   $("#yAttribute").val(resources.selectedAttributes.y) 
+   $("#zAttribute").val(resources.selectedAttributes.z) 
+   $("#startingYear").val(resources.selectedYear.start) 
+   $("#lastYear").val(resources.selectedYear.finish) 
+   $("#singleYearSelector").val(resources.singleYear) 
+}

@@ -20,22 +20,69 @@ select{
 
 }
 
-.selectorSection{
+.selectorSection,
+.labelSection{
     display: inline-block;
     margin-left: 45px;
 }
 .controlButton{
    display: block!important;
-   margin-top:20px;
-    width:40%;
+   width: 160px;
+    margin-left: 45px;
 }
 
 .buttonDiv{
    padding-left: 14%;
 }
 
-#animateButton{
-    width: 160px;
-    margin-left: 45px;
-    
+.labelSection label{
+    display: block !important;
 }
+
+.labelSection> label:first-of-type{    
+    padding-bottom: 20px;
+}
+
+#startingYear{
+    margin-bottom: 10px;
+}
+
+
+#animateButton{
+    margin-bottom: 10px;
+}
+
+#year{
+    margin-top:20px;    
+}
+
+.yearSection{
+    margin-left : 70px;
+}   
+
+#generateMultipleButton{
+    white-space: normal;
+}
+
+.dataTable{ 
+    
+    width: 1200px;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 50px;}
+
+    .dataTable td,
+    .dataTable tr,
+    .dataTable th{
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+        border-bottom-color: rgb(206, 212, 218);
+    }
+
+    #data{
+        margin-left: 9%;
+        margin-right: 9%;
+    }
+    #generateTable{
+        width: 582px;
+    }
