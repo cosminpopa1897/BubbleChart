@@ -239,10 +239,11 @@ function getHeaders(){
 function getData(country){
     var tableData = [];
     var years = getYearsRange(resources.selectedYear.start, resources.selectedYear.finish)
-    for(var year in years){
-        let yearData = data_set[years[year]][country];
+    for(var index in years){
+        let year = years[index]
+        let yearData = data_set[year][country];
         let tableElement = {};
-        tableElement.year = years[year];
+        tableElement.year = year;
         for (var attribute in data_set[year][country]){
             tableElement[attribute] = data_set[year][country][attribute];
         }
